@@ -1,0 +1,15 @@
+<launch>
+  <remap from="ssf_core/imu_state_input" to="/raw_imu" />
+  <param name="/pose_sensor/init_filter" type="bool" value="true" />
+  <param name="/position_sensor/init_filter" type="bool" value="true" />
+  <include file="$(find ssf_updates)/launch/pose_sensor.launch" />
+  <node name="to_mono8_converter" pkg="image_converter" type="to_mono8">
+    <remap from="camera/image_raw" to="/front_cam/camera/image" />
+  </node>
+  <remap from="camera/image_raw" to="/image_converter/output_image" />
+  <include file="$(find ptam)/launch/ptam.launch" />
+  <remap from="camera/image_raw" to="/image_converter/output_image" />
+  <remap from="tf" to="/gazebo/tf" />
+  <include file="$(find fusion_simulation)/launch/outdoor_pelican_gazebo.launch" />
+
+</launch>
